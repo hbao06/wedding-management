@@ -1,0 +1,22 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Java / Maven
+*.class
+target/
+*.log
+
+# Node / Vite
+node_modules/
+dist/
+.vite/
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
