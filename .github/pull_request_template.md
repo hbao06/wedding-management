@@ -1,25 +1,43 @@
-## Mục đích
+## Tóm tắt
 
-<!-- PR này giải quyết yêu cầu hoặc vấn đề nào? -->
+<!-- Mô tả ngắn gọn PR này làm gì trong 1-2 câu. -->
 
-## Thay đổi
+## Liên quan
 
-<!-- Tóm tắt chức năng và các tệp chính đã sửa -->
+<!-- Link issue / user story / backlog item. Ví dụ: Closes #12, US02-QĐ1. -->
 
-## Kiểm thử
+## Thay đổi chính
 
-- [ ] Backend: `mvn test`
-- [ ] Frontend: `npm run build`
-- [ ] Đã kiểm tra thủ công các luồng liên quan
+<!-- Liệt kê chức năng và các tệp/thư mục quan trọng đã thêm hoặc sửa. -->
 
-## Lưu ý
+-
+-
 
-<!-- Rủi ro, cấu hình cần thiết, ảnh chụp nếu có -->
+## Cách kiểm thử
 
-## Checklist review
+<!-- Các bước để reviewer kiểm tra lại. -->
 
-- [ ] Thay đổi đúng chức năng yêu cầu
-- [ ] Tên biến, hàm và lớp dễ hiểu
-- [ ] Không còn mã thừa hoặc debug
-- [ ] Không đưa mật khẩu, `.env` hoặc dữ liệu thật lên repo
-- [ ] Đã chạy các kiểm tra phù hợp
+1.
+2.
+
+**Kết quả kiểm thử:**
+
+- [ ] Backend: `mvn test` — BUILD SUCCESS
+- [ ] Frontend: `npm run build` — thành công
+- [ ] Đã kiểm tra thủ công luồng liên quan
+
+## Ảnh minh chứng
+
+<!-- Dán ảnh giao diện hoặc kết quả test nếu có. -->
+
+## Lưu ý cho reviewer
+
+<!-- Rủi ro, cấu hình cần thiết (.env, seed data), điểm cần chú ý khi review. -->
+
+## Checklist
+
+- [ ] Đúng phạm vi yêu cầu, không lẫn thay đổi ngoài lề
+- [ ] Tên biến, hàm, lớp rõ ràng, tuân thủ convention dự án
+- [ ] Không còn mã thừa, comment debug hoặc `console.log`
+- [ ] Không commit `.env`, mật khẩu, dữ liệu thật, `node_modules/`, `target/`, `dist/`
+- [ ] API lỗi trả về đúng định dạng `{ "message": "...", "details": [...] }`
