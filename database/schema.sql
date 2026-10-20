@@ -1,0 +1,115 @@
+CREATE DATABASE IF NOT EXISTS wedding_db
+    CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+
+USE wedding_db;
+
+CREATE TABLE IF NOT EXISTS NGUOIDUNG (
+    MaND CHAR(10) PRIMARY KEY,
+    HoTen VARCHAR(100) NOT NULL,
+    TenDangNhap VARCHAR(50) NOT NULL UNIQUE,
+    MatKhauHash VARCHAR(255) NOT NULL,
+    SDT VARCHAR(15),
+    Email VARCHAR(100),
+    VaiTro VARCHAR(20) NOT NULL,
+    TrangThai BIT(1) NOT NULL DEFAULT b'1',
+    CONSTRAINT chk_nguoidung_vaitro CHECK (VaiTro IN ('KhachHang', 'NhanVien', 'Admin'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS KHACHHANG (
+    MaKH CHAR(10) PRIMARY KEY,
+    HoTenChuRe VARCHAR(100) NOT NULL,
+    HoTenCoDau VARCHAR(100) NOT NULL,
+    DiaChi VARCHAR(200),
+    CONSTRAINT fk_khachhang_nguoidung FOREIGN KEY (MaKH) REFERENCES NGUOIDUNG (MaND)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS NHANVIEN (
+    MaNV CHAR(10) PRIMARY KEY,
+    ChucVu VARCHAR(30) NOT NULL,
+    NgayVaoLam DATE NOT NULL,
+    CONSTRAINT fk_nhanvien_nguoidung FOREIGN KEY (MaNV) REFERENCES NGUOIDUNG (MaND),
+    CONSTRAINT chk_nhanvien_chucvu CHECK (ChucVu IN ('Sales', 'Kế toán', 'Quản lý'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS SANH (
+    MaSanh CHAR(10) PRIMARY KEY,
+    TenSanh VARCHAR(100) NOT NULL UNIQUE,
+    LoaiSanh VARCHAR(20) NOT NULL,
+    SoBanToiDa INT NOT NULL,
+    DonGiaToiThieu DECIMAL(15,0) NOT NULL,
+    TrangThai VARCHAR(20) NOT NULL DEFAULT 'Hoạt động',
+    CONSTRAINT chk_sanh_loai CHECK (LoaiSanh IN ('A', 'B', 'C', 'D', 'E')),
+    CONSTRAINT chk_sanh_soban CHECK (SoBanToiDa > 0),
+    CONSTRAINT chk_sanh_dongia CHECK (DonGiaToiThieu >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS DICHVU (
+    MaDV CHAR(10) PRIMARY KEY,
+    TenDichVu VARCHAR(100) NOT NULL UNIQUE,
+    DonGia DECIMAL(15,0) NOT NULL,
+    DonViTinh VARCHAR(20) NOT NULL,
+    CONSTRAINT chk_dichvu_dongia CHECK (DonGia >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS QUYDINH (
+    MaQD CHAR(10) PRIMARY KEY,
+    TenQuyDinh VARCHAR(150) NOT NULL,
+    GiaTriQuyDinh VARCHAR(200) NOT NULL,
+    NgayApDung DATE NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS PHIEUDATTIECCUOI (
+    MaPhieu CHAR(10) PRIMARY KEY,
+    MaKH CHAR(10) NOT NULL,
+    MaSanh CHAR(10) NOT NULL,
+    MaNV CHAR(10) NOT NULL,
+    TenChuRe VARCHAR(100) NOT NULL,
+    TenCoDau VARCHAR(100) NOT NULL,
+    NgayDaiTiec DATE NOT NULL,
+    Ca VARCHAR(10) NOT NULL,
+    SoLuongBan INT NOT NULL,
+    DonGiaBan DECIMAL(15,0) NOT NULL,
+    TienDatCoc DECIMAL(15,0) NOT NULL DEFAULT 0,
+    TongTienDuKien DECIMAL(15,0) NOT NULL,
+    TrangThai VARCHAR(20) NOT NULL DEFAULT 'Tạm giữ',
+    NgayLapPhieu DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_phieu_khachhang FOREIGN KEY (MaKH) REFERENCES KHACHHANG (MaKH),
+    CONSTRAINT fk_phieu_sanh FOREIGN KEY (MaSanh) REFERENCES SANH (MaSanh),
+    CONSTRAINT fk_phieu_nhanvien FOREIGN KEY (MaNV) REFERENCES NHANVIEN (MaNV),
+    CONSTRAINT uq_phieu_sanh_ngay_ca UNIQUE (MaSanh, NgayDaiTiec, Ca),
+    CONSTRAINT chk_phieu_ca CHECK (Ca IN ('SANG', 'TRUA', 'TOI')),
+    CONSTRAINT chk_phieu_soban CHECK (SoLuongBan > 0),
+    CONSTRAINT chk_phieu_dongia CHECK (DonGiaBan >= 0),
+    CONSTRAINT chk_phieu_coc CHECK (TienDatCoc >= 0),
+    CONSTRAINT chk_phieu_tongtien CHECK (TongTienDuKien >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS CHITIETDICHVU (
+    MaCTDV CHAR(10) PRIMARY KEY,
+    MaPhieu CHAR(10) NOT NULL,
+    MaDV CHAR(10) NOT NULL,
+    SoLuong INT NOT NULL,
+    ThanhTien DECIMAL(15,0) NOT NULL,
+    CONSTRAINT fk_chitiet_phieu FOREIGN KEY (MaPhieu) REFERENCES PHIEUDATTIECCUOI (MaPhieu) ON DELETE CASCADE,
+    CONSTRAINT fk_chitiet_dichvu FOREIGN KEY (MaDV) REFERENCES DICHVU (MaDV),
+    CONSTRAINT uq_chitiet_phieu_dichvu UNIQUE (MaPhieu, MaDV),
+    CONSTRAINT chk_chitiet_soluong CHECK (SoLuong > 0),
+    CONSTRAINT chk_chitiet_thanhtien CHECK (ThanhTien >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS HOADONTHANHTOAN (
+    MaHD CHAR(10) PRIMARY KEY,
+    MaPhieu CHAR(10) NOT NULL UNIQUE,
+    MaNV CHAR(10) NOT NULL,
+    NgayLapHD DATE NOT NULL,
+    NgayThanhToan DATE NOT NULL,
+    TongTienHoaDon DECIMAL(15,0) NOT NULL,
+    TienPhatTreHan DECIMAL(15,0) NOT NULL DEFAULT 0,
+    SoTienConLai DECIMAL(15,0) NOT NULL,
+    TrangThaiTT VARCHAR(20) NOT NULL DEFAULT 'Chưa thanh toán',
+    CONSTRAINT fk_hoadon_phieu FOREIGN KEY (MaPhieu) REFERENCES PHIEUDATTIECCUOI (MaPhieu),
+    CONSTRAINT fk_hoadon_nhanvien FOREIGN KEY (MaNV) REFERENCES NHANVIEN (MaNV),
+    CONSTRAINT chk_hoadon_tongtien CHECK (TongTienHoaDon >= 0),
+    CONSTRAINT chk_hoadon_tienphat CHECK (TienPhatTreHan >= 0),
+    CONSTRAINT chk_hoadon_conlai CHECK (SoTienConLai >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
