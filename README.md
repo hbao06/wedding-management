@@ -2,7 +2,7 @@
 
 Đồ án môn Công nghệ phần mềm (Lab 7: Software Implementation & Version Control). Hệ thống hướng tới việc quản lý sảnh, phiếu đặt tiệc, tiền cọc, hóa đơn và thanh toán cho một trung tâm tiệc cưới. Thiết kế nghiệp vụ và kiến trúc kế thừa từ Lab 6.
 
-**Trạng thái hiện tại:** nhánh `feature/project-setup` đã có CSDL 9 bảng, khung Backend Spring Boot, 9 entity/repository và giao diện React kiểm tra kết nối. API nghiệp vụ, đăng nhập và tài khoản mẫu chưa được triển khai.
+**Trạng thái hiện tại:** đã có khung CSDL, đăng nhập và chức năng thanh toán một lần trên nhánh `feature/payment`. Booking vẫn đang được phát triển; dữ liệu mẫu chưa có tài khoản hoặc phiếu đặt tiệc.
 
 ## Thành viên và phân công
 
@@ -30,7 +30,7 @@
 - Backend: Java 17, Spring Boot 3.5.16, Maven, Spring Data JPA.
 - Frontend: React 19, Vite 8, React Router 7, Axios.
 - CSDL: MySQL 8, bảng mã `utf8mb4`.
-- Kiểm thử dự kiến: JUnit 5; hiện chưa có test case tự động trong repo.
+- Kiểm thử: JUnit 5 và Mockito cho phép tính, xác nhận thanh toán và phân quyền API.
 
 ```text
 wedding-management/
@@ -149,11 +149,11 @@ Tại `frontend/`:
 npm run build
 ```
 
-`npm run build` kiểm tra Frontend biên dịch được. `mvn test` hiện chưa chạy test case nghiệp vụ vì thư mục test chưa được bổ sung. Để xác nhận luồng tích hợp, kiểm tra `/api/health` và trang Tổng quan như hai bước trên; chỉ ghi kết quả vào báo cáo sau khi chạy thực tế trên máy.
+`npm run build` kiểm tra Frontend biên dịch được. `mvn test` chạy test payment; để xác nhận luồng đầy đủ vẫn cần MySQL, tài khoản Kế toán và một phiếu `Đã đặt cọc` sau ngày đãi tiệc.
 
 ## Tài khoản mẫu
 
-`database/seed.sql` **chưa tạo tài khoản đăng nhập**; chức năng đăng nhập thuộc nhánh `feature/login`. Các tên tài khoản dưới đây là dự kiến cho dữ liệu mẫu ở giai đoạn sau, hiện **không thể dùng để đăng nhập**:
+`database/seed.sql` **chưa tạo tài khoản đăng nhập**. Các tên tài khoản dưới đây là dự kiến cho dữ liệu mẫu ở giai đoạn sau, hiện **không thể dùng để đăng nhập**:
 
 | Tên dự kiến | Vai trò |
 | --- | --- |
@@ -166,20 +166,35 @@ Không đưa mật khẩu mẫu hoặc mật khẩu thật vào README.
 
 ## API
 
-API có tiền tố `/api`. Trên nhánh `feature/project-setup`, **chỉ endpoint đầu tiên đã có code**; các endpoint còn lại là danh sách dự kiến theo thiết kế Lab 6.
+API có tiền tố `/api`. Các API thanh toán yêu cầu phiên đăng nhập của nhân viên có chức vụ `Kế toán`.
 
 | Trạng thái | Phương thức | Đường dẫn | Mục đích |
 | --- | --- | --- | --- |
 | Đã có | `GET` | `/api/health` | Trạng thái Backend, kết nối CSDL và số sảnh |
-| Dự kiến | `POST` | `/api/auth/login` | Đăng nhập |
+| Đã có | `POST` | `/api/auth/login` | Đăng nhập, tạo phiên server |
+| Đã có | `GET` | `/api/auth/me` | Lấy người dùng của phiên hiện tại |
+| Đã có | `POST` | `/api/auth/logout` | Hủy phiên đăng nhập |
 | Dự kiến | `GET` | `/api/sanh` | Danh sách sảnh |
 | Dự kiến | `GET` | `/api/sanh/con-trong?ngay=2026-12-20&ca=TOI` | Kiểm tra sảnh trống |
 | Dự kiến | `GET` | `/api/dich-vu` | Danh sách dịch vụ |
 | Dự kiến | `POST` | `/api/phieu` | Lập phiếu đặt tiệc |
 | Dự kiến | `GET` | `/api/phieu/{maPhieu}` | Xem phiếu đặt tiệc |
-| Dự kiến | `GET` | `/api/thanh-toan/phieu?q=` | Tra cứu phiếu thanh toán |
-| Dự kiến | `GET` | `/api/thanh-toan/phieu/{maPhieu}/xem-truoc?ngayThanhToan=` | Xem trước số tiền cần thanh toán |
-| Dự kiến | `POST` | `/api/thanh-toan/hoa-don` | Lập hóa đơn thanh toán |
+| Đã có | `GET` | `/api/thanh-toan/phieu?q=` | Tra cứu tối đa 30 phiếu theo mã hoặc tên cô dâu/chú rể |
+| Đã có | `GET` | `/api/thanh-toan/phieu/{maPhieu}/xem-truoc?ngayThanhToan=2026-12-20` | Xem trước số tiền cần thu |
+| Đã có | `POST` | `/api/thanh-toan/hoa-don` | Xác nhận đã thu tiền, tạo hóa đơn một lần |
+
+Body xác nhận: `{"maPhieu":"P001","ngayThanhToan":"2026-12-20","soTienCanThu":7200000}`. `soTienCanThu` phải khớp bản tính lại trên server, nếu không API trả `409` để kế toán xem trước lại. Chỉ phiếu `Đã đặt cọc` và đã đến ngày đãi tiệc mới được thanh toán. Tiền phạt = tổng tiền hóa đơn × tỷ lệ QD002 (hiện 1%/ngày) × số ngày sau ngày đãi tiệc; sau đó trừ tiền cọc. Hiện tổng tiền hóa đơn lấy từ `TongTienDuKien` của phiếu vì chưa có nghiệp vụ điều chỉnh chi phí thực tế. Hóa đơn được lập lúc xác nhận đã nhận tiền, `SoTienConLai = 0`; nút in trên giao diện dùng hộp thoại in của trình duyệt để lưu PDF.
+
+### Xem thử payment trên máy local
+
+Sau khi chạy `database/schema.sql` và `database/seed.sql`, mở PowerShell ở `backend/` và khởi động profile demo:
+
+```powershell
+$env:DEMO_PAYMENT_PASSWORD = Read-Host 'Mật khẩu tạm cho demo_ketoan'
+mvn '-Dspring-boot.run.profiles=demo' spring-boot:run
+```
+
+Profile này chỉ thêm dữ liệu có mã `DM*` nếu chưa có: tài khoản Kế toán `demo_ketoan`, một sảnh và hai phiếu `Đã đặt cọc` (`DMPH000001` trước ngày tạo hai ngày, `DMPH000002` vào ngày tạo). Mật khẩu được đặt lúc tài khoản được tạo lần đầu, không lưu trong repo và không bị đổi ở những lần khởi động sau. Chạy Frontend rồi đăng nhập bằng `demo_ketoan` và mở **Thanh toán**. Dữ liệu demo tồn tại trong MySQL sau khi dừng server; không bật profile `demo` trên môi trường khác.
 
 ## Quy trình làm việc nhóm
 

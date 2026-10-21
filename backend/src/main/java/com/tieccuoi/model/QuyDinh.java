@@ -23,4 +23,7 @@ public class QuyDinh {
     private LocalDate ngayApDung;
 
     protected QuyDinh() {}
+
+    public String getGiaTriQuyDinh() { return giaTriQuyDinh; }
+    public LocalDate getNgayApDung() { return ngayApDung; }
 }
