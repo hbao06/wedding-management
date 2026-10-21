@@ -37,4 +37,29 @@ public class NguoiDung {
     private Boolean trangThai;
 
     protected NguoiDung() {}
+    
+        public String getMaND() {
+            return maND;
+        }
+
+        public String getHoTen() {
+            return hoTen;
+        }
+
+        public String getTenDangNhap() {
+            return tenDangNhap;
+        }
+
+        public String getMatKhauHash() {
+            return matKhauHash;
+        }
+
+        public String getVaiTro() {
+            return vaiTro;
+        }
+
+        public Boolean getTrangThai() {
+            return trangThai;
+        }
+
 }

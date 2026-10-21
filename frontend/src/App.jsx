@@ -1,12 +1,29 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Database, HeartHandshake, RefreshCw, Server } from 'lucide-react'
-import { Route, Routes } from 'react-router'
+import { Route, Routes, useNavigate } from 'react-router'
+import Login from './pages/Login.jsx'
 import { getHealth } from './services/api.js'
 
 function Dashboard() {
+  const [nguoiDung, setNguoiDung] = useState(() => {
+    try {
+      return JSON.parse(sessionStorage.getItem('nguoiDung') || 'null')
+    } catch {
+      return null
+    }
+  })
+
   const [health, setHealth] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!nguoiDung) {
+      navigate('/login', { replace: true })
+    }
+  }, [nguoiDung, navigate])
 
   const refresh = useCallback(async () => {
     setLoading(true)
@@ -35,6 +52,22 @@ function Dashboard() {
           <span>Quản lý tiệc cưới</span>
         </div>
         <span className="environment">Môi trường phát triển</span>
+        {nguoiDung && (
+          <span className="environment">
+            Xin chào, {nguoiDung.hoTen}
+          </span>
+        )}
+
+        <button
+          className="logout-button"
+          onClick={() => {
+            sessionStorage.removeItem('nguoiDung')
+            setNguoiDung(null)
+            navigate('/login', { replace: true })
+          }}
+        >
+          Đăng xuất
+        </button>
       </header>
 
       <main className="main-content">
@@ -85,5 +118,10 @@ function Dashboard() {
 }
 
 export default function App() {
-  return <Routes><Route path="*" element={<Dashboard />} /></Routes>
+  return (
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<Dashboard />} />
+    </Routes>
+  )
 }
