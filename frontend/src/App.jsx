@@ -4,6 +4,8 @@ import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router'
 import Login from './pages/Login.jsx'
 import Payment from './pages/Payment.jsx'
 import api, { getCurrentUser, getHealth } from './services/api.js'
+import Booking from './pages/Booking.jsx'
+import BookingResult from './pages/BookingResult.jsx'
 
 function Dashboard() {
   const [health, setHealth] = useState(null)
@@ -119,6 +121,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={user ? <Navigate to={user.chucVu === 'Kế toán' ? '/thanh-toan' : '/'} replace /> : <Login onLogin={setUser} />} />
+      <Route path="/booking" element={user ? <Booking /> : <Navigate to="/login" replace />} />
+      <Route path="/booking-result/:maPhieu" element={user ? <BookingResult /> : <Navigate to="/login" replace />} />
       <Route path="*" element={user ? <Workspace user={user} onLogout={() => setUser(null)} /> : <Navigate to="/login" replace />} />
     </Routes>
   )

@@ -56,12 +56,94 @@ public class PhieuDatTiecCuoi {
 
     protected PhieuDatTiecCuoi() {}
 
-    public String getMaPhieu() { return maPhieu; }
-    public String getTenChuRe() { return tenChuRe; }
-    public String getTenCoDau() { return tenCoDau; }
-    public LocalDate getNgayDaiTiec() { return ngayDaiTiec; }
-    public BigDecimal getTienDatCoc() { return tienDatCoc; }
-    public BigDecimal getTongTienDuKien() { return tongTienDuKien; }
-    public String getTrangThai() { return trangThai; }
-    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
+    public PhieuDatTiecCuoi(
+            String maPhieu,
+            String maKH,
+            String maSanh,
+            String maNV,
+            String tenChuRe,
+            String tenCoDau,
+            LocalDate ngayDaiTiec,
+            String ca,
+            Integer soLuongBan,
+            BigDecimal donGiaBan,
+            BigDecimal tienDatCoc,
+            BigDecimal tongTienDuKien,
+            String trangThai,
+            LocalDateTime ngayLapPhieu) {
+        this.maPhieu = maPhieu;
+        this.maKH = maKH;
+        this.maSanh = maSanh;
+        this.maNV = maNV;
+        this.tenChuRe = tenChuRe;
+        this.tenCoDau = tenCoDau;
+        this.ngayDaiTiec = ngayDaiTiec;
+        this.ca = ca;
+        this.soLuongBan = soLuongBan;
+        this.donGiaBan = donGiaBan;
+        this.tienDatCoc = tienDatCoc;
+        this.tongTienDuKien = tongTienDuKien;
+        this.trangThai = trangThai;
+        this.ngayLapPhieu = ngayLapPhieu;
+    }
+
+    public String getMaPhieu() {
+        return maPhieu;
+    }
+
+    public String getMaKH() {
+        return maKH;
+    }
+
+    public String getMaSanh() {
+        return maSanh;
+    }
+
+    public String getMaNV() {
+        return maNV;
+    }
+
+    public String getTenChuRe() {
+        return tenChuRe;
+    }
+
+    public String getTenCoDau() {
+        return tenCoDau;
+    }
+
+    public LocalDate getNgayDaiTiec() {
+        return ngayDaiTiec;
+    }
+
+    public String getCa() {
+        return ca;
+    }
+
+    public Integer getSoLuongBan() {
+        return soLuongBan;
+    }
+
+    public BigDecimal getDonGiaBan() {
+        return donGiaBan;
+    }
+
+    public BigDecimal getTienDatCoc() {
+        return tienDatCoc;
+    }
+
+    public BigDecimal getTongTienDuKien() {
+        return tongTienDuKien;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public LocalDateTime getNgayLapPhieu() {
+        return ngayLapPhieu;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
 }
