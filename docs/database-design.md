@@ -126,7 +126,7 @@ Từ Class Diagram ở Tuần 5, nhóm xác định **9 thực thể (bảng)**:
 | NgayThanhToan  | DATE          | —     | NOT NULL                              | Ngày khách thanh toán                       |
 | TongTienHoaDon | DECIMAL(15,0) | —     | NOT NULL                              | Tổng tiền thực tế (bàn + dịch vụ phát sinh) |
 | TienPhatTreHan | DECIMAL(15,0) | —     | DEFAULT 0 — 1%/ngày (QĐ4)             | Tiền phạt nếu thanh toán trễ hạn            |
-| SoTienConLai   | DECIMAL(15,0) | —     | = TongTien + Phạt − Cọc               | Số tiền còn lại phải thu                    |
+| SoTienConLai   | DECIMAL(15,0) | —     | = 0 sau khi xác nhận thu một lần       | Công nợ còn lại sau thanh toán              |
 | TrangThaiTT    | VARCHAR(20)   | —     | DEFAULT 'Chưa thanh toán'             | Trạng thái thanh toán                       |
 
 ### 4.9. Bảng QUYDINH

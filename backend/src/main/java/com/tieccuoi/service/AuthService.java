@@ -4,6 +4,7 @@ package com.tieccuoi.service;
 import com.tieccuoi.dto.LoginRequest;
 import com.tieccuoi.dto.LoginResponse;
 import com.tieccuoi.model.NguoiDung;
+import com.tieccuoi.model.NhanVien;
 import com.tieccuoi.repository.NguoiDungRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,8 +41,20 @@ public class AuthService {
             nguoiDung.getMaND(),
             nguoiDung.getHoTen(),
             nguoiDung.getTenDangNhap(),
-            nguoiDung.getVaiTro()
+            nguoiDung.getVaiTro(),
+            nguoiDung instanceof NhanVien nhanVien ? nhanVien.getChucVu() : null
         );
+    }
+
+    public LoginResponse currentUser(String maND) {
+        NguoiDung user = nguoiDungRepository.findById(maND)
+            .orElseThrow(this::invalidCredentials);
+        if (!Boolean.TRUE.equals(user.getTrangThai())) {
+            throw invalidCredentials();
+        }
+        return new LoginResponse(user.getMaND(), user.getHoTen(),
+                user.getTenDangNhap(), user.getVaiTro(),
+                user instanceof NhanVien nhanVien ? nhanVien.getChucVu() : null);
     }
 
     private ResponseStatusException invalidCredentials() {
