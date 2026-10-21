@@ -143,7 +143,7 @@ public class PhieuDatTiecCuoi {
         return ngayLapPhieu;
     }
 
-     public void setTrangThai(String trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 }

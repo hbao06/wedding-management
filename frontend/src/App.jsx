@@ -7,7 +7,6 @@ import api, { getCurrentUser, getHealth } from './services/api.js'
 import Booking from './pages/Booking.jsx'
 import BookingResult from './pages/BookingResult.jsx'
 
-
 function Dashboard() {
   const [health, setHealth] = useState(null)
   const [loading, setLoading] = useState(true)
