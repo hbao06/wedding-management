@@ -142,4 +142,8 @@ public class PhieuDatTiecCuoi {
     public LocalDateTime getNgayLapPhieu() {
         return ngayLapPhieu;
     }
+
+     public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
+    }
 }

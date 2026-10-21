@@ -24,7 +24,6 @@ public class QuyDinh {
 
     protected QuyDinh() {}
 
-    public String getGiaTriQuyDinh() {
-        return giaTriQuyDinh;
-    }
+    public String getGiaTriQuyDinh() { return giaTriQuyDinh; }
+    public LocalDate getNgayApDung() { return ngayApDung; }
 }

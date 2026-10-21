@@ -17,4 +17,6 @@ public class NhanVien extends NguoiDung {
     private LocalDate ngayVaoLam;
 
     protected NhanVien() {}
+
+    public String getChucVu() { return chucVu; }
 }
