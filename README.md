@@ -8,9 +8,9 @@
 
 | Thành viên | MSSV | Vai trò | Nhánh phụ trách |
 | --- | --- | --- | --- |
-| Trương Huỳnh Hoài Bảo | 52400170 | Nhóm trưởng, Product Owner | `feature/login` |
+| Trương Huỳnh Hoài Bảo | 52400170 | Nhóm trưởng, Product Owner | `feature/project-setup`, `feature/payment` |
 | Chung Nguyễn Minh Trí | 52400248 | Scrum Master, Developer | `feature/booking` |
-| Lê Trung Bảo | 52400042 | Developer, Tester, Database | `feature/project-setup`, `feature/payment` |
+| Lê Trung Bảo | 52400042 | Developer, Tester, Database | `feature/login` |
 
 `main` giữ phiên bản ổn định; `develop` là nhánh tích hợp. Phân công review và quy tắc Git chi tiết nằm trong [docs/git-flow.md](docs/git-flow.md).
 
