@@ -3,6 +3,8 @@ import { Database, HeartHandshake, RefreshCw, Server } from 'lucide-react'
 import { Route, Routes, useNavigate } from 'react-router'
 import Login from './pages/Login.jsx'
 import { getHealth } from './services/api.js'
+import Booking from './pages/Booking.jsx'
+import BookingResult from './pages/BookingResult.jsx'
 
 function Dashboard() {
   const [nguoiDung, setNguoiDung] = useState(() => {
@@ -120,6 +122,8 @@ function Dashboard() {
 export default function App() {
   return (
     <Routes>
+      <Route path="/booking" element={<Booking />} />
+      <Route path="/booking-result/:maPhieu" element={<BookingResult />} />
       <Route path="/login" element={<Login />} />
       <Route path="*" element={<Dashboard />} />
     </Routes>
