@@ -29,4 +29,28 @@ public class Sanh {
     private String trangThai;
 
     protected Sanh() {}
+
+    public String getMaSanh() {
+        return maSanh;
+    }
+
+    public String getTenSanh() {
+        return tenSanh;
+    }
+
+    public String getLoaiSanh() {
+        return loaiSanh;
+    }
+
+    public Integer getSoBanToiDa() {
+        return soBanToiDa;
+    }
+
+    public BigDecimal getDonGiaToiThieu() {
+        return donGiaToiThieu;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
 }
