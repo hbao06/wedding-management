@@ -1,21 +1,19 @@
 
 import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
+import { HeartHandshake, LockKeyhole, UserRound } from 'lucide-react'
 import api from '../services/api.js'
 
 export default function Login() {
   const navigate = useNavigate()
-  const location = useLocation()
 
   const [tenDangNhap, setTenDangNhap] = useState('')
   const [matKhau, setMatKhau] = useState('')
-  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
-  const message = location.state?.message
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
+  async function handleSubmit(event) {
+    event.preventDefault()
     setError('')
     setLoading(true)
 
@@ -25,23 +23,16 @@ export default function Login() {
         matKhau,
       })
 
-      sessionStorage.setItem(
-        'nguoiDung',
-        JSON.stringify(response.data)
-      )
-
-      navigate('/', { replace: true })
+      // Lưu thông tin người dùng sau khi đăng nhập thành công.
+      sessionStorage.setItem('nguoiDung', JSON.stringify(response.data))
+      navigate('/')
     } catch (err) {
-      const status = err.response?.status
-
-      if (status === 401) {
+      if (err.response?.status === 401) {
         setError('Tên đăng nhập hoặc mật khẩu không đúng.')
-      } else if (status === 400) {
-        setError('Vui lòng kiểm tra lại thông tin đăng nhập.')
-      } else if (!err.response) {
-        setError('Không thể kết nối máy chủ. Hãy kiểm tra Backend.')
+      } else if (err.response?.status === 400) {
+        setError('Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu.')
       } else {
-        setError('Đăng nhập thất bại. Vui lòng thử lại.')
+        setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
       }
     } finally {
       setLoading(false)
@@ -49,54 +40,52 @@ export default function Login() {
   }
 
   return (
-    <main className="auth-page">
-      <section className="auth-card">
-        <div className="auth-heading">
-          <h1>Đăng nhập</h1>
-          <p>Quản lý tiệc cưới</p>
+    <main className="login-page">
+      <section className="login-card">
+        <div className="login-logo">
+          <HeartHandshake size={32} />
         </div>
 
-        {message && (
-          <p className="auth-success" role="status">
-            {message}
-          </p>
-        )}
-
-        {error && (
-          <p className="auth-error" role="alert">
-            {error}
-          </p>
-        )}
+        <h1>Quản lý tiệc cưới</h1>
+        <p className="login-description">
+          Đăng nhập để tiếp tục
+        </p>
 
         <form onSubmit={handleSubmit}>
-          <div className="register-field">
-            <label htmlFor="tenDangNhap">
-              Tên đăng nhập
-            </label>
+          <label htmlFor="tenDangNhap">Tên đăng nhập</label>
+          <div className="login-input">
+            <UserRound size={18} />
             <input
               id="tenDangNhap"
               type="text"
+              placeholder="Nhập tên đăng nhập"
               value={tenDangNhap}
-              onChange={(e) => setTenDangNhap(e.target.value)}
+              onChange={(event) => setTenDangNhap(event.target.value)}
               autoComplete="username"
               required
             />
           </div>
 
-          <div className="register-field">
-            <label htmlFor="matKhau">Mật khẩu</label>
+          <label htmlFor="matKhau">Mật khẩu</label>
+          <div className="login-input">
+            <LockKeyhole size={18} />
             <input
               id="matKhau"
               type="password"
+              placeholder="Nhập mật khẩu"
               value={matKhau}
-              onChange={(e) => setMatKhau(e.target.value)}
+              onChange={(event) => setMatKhau(event.target.value)}
               autoComplete="current-password"
               required
             />
           </div>
 
+          {error && (
+            <p className="login-error" role="alert">{error}</p>
+          )}
+
           <button
-            className="auth-submit"
+            className="login-submit"
             type="submit"
             disabled={loading}
           >
@@ -104,8 +93,8 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="register-link">
-          Chưa có tài khoản? <Link to="/register">Đăng ký ngay</Link>
+        <p className="login-footer">
+          Hệ thống quản lý tiệc cưới
         </p>
       </section>
     </main>

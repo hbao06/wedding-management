@@ -1,4 +1,3 @@
-
 package com.tieccuoi.model;
 
 import jakarta.persistence.Column;
@@ -12,7 +11,6 @@ import jakarta.persistence.Table;
 @Table(name = "NGUOIDUNG")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class NguoiDung {
-
     @Id
     @Column(name = "MaND", columnDefinition = "char(10)")
     private String maND;
@@ -38,72 +36,30 @@ public class NguoiDung {
     @Column(name = "TrangThai", nullable = false)
     private Boolean trangThai;
 
-    protected NguoiDung() {
-    }
+    protected NguoiDung() {}
+    
+        public String getMaND() {
+            return maND;
+        }
 
-    // Getter
-    public String getMaND() {
-        return maND;
-    }
+        public String getHoTen() {
+            return hoTen;
+        }
 
-    public String getHoTen() {
-        return hoTen;
-    }
+        public String getTenDangNhap() {
+            return tenDangNhap;
+        }
 
-    public String getTenDangNhap() {
-        return tenDangNhap;
-    }
+        public String getMatKhauHash() {
+            return matKhauHash;
+        }
 
-    public String getMatKhauHash() {
-        return matKhauHash;
-    }
+        public String getVaiTro() {
+            return vaiTro;
+        }
 
-    public String getSdt() {
-        return sdt;
-    }
+        public Boolean getTrangThai() {
+            return trangThai;
+        }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getVaiTro() {
-        return vaiTro;
-    }
-
-    public Boolean getTrangThai() {
-        return trangThai;
-    }
-
-    // Setter
-    public void setMaND(String maND) {
-        this.maND = maND;
-    }
-
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
-    }
-
-    public void setTenDangNhap(String tenDangNhap) {
-        this.tenDangNhap = tenDangNhap;
-    }
-
-    public void setMatKhauHash(String matKhauHash) {
-        this.matKhauHash = matKhauHash;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setVaiTro(String vaiTro) {
-        this.vaiTro = vaiTro;
-    }
-
-    public void setTrangThai(Boolean trangThai) {
-        this.trangThai = trangThai;
-    }
 }
