@@ -1,11 +1,12 @@
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import { HeartHandshake, LockKeyhole, UserRound } from 'lucide-react'
 import api from '../services/api.js'
 
 export default function Login({ onLogin }) {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const [tenDangNhap, setTenDangNhap] = useState('')
   const [matKhau, setMatKhau] = useState('')
@@ -49,6 +50,7 @@ export default function Login({ onLogin }) {
         <p className="login-description">
           Đăng nhập để tiếp tục
         </p>
+        {location.state?.message && <p className="auth-notice" role="status">{location.state.message}</p>}
 
         <form onSubmit={handleSubmit}>
           <label htmlFor="tenDangNhap">Tên đăng nhập</label>
@@ -91,6 +93,8 @@ export default function Login({ onLogin }) {
             {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
         </form>
+
+        <p className="register-link">Chưa có tài khoản? <Link to="/register">Đăng ký</Link></p>
 
         <p className="login-footer">
           Hệ thống quản lý tiệc cưới

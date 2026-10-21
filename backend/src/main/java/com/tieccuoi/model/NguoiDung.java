@@ -37,6 +37,15 @@ public class NguoiDung {
     private Boolean trangThai;
 
     protected NguoiDung() {}
+
+    public void setMaND(String maND) { this.maND = maND; }
+    public void setHoTen(String hoTen) { this.hoTen = hoTen; }
+    public void setTenDangNhap(String tenDangNhap) { this.tenDangNhap = tenDangNhap; }
+    public void setMatKhauHash(String matKhauHash) { this.matKhauHash = matKhauHash; }
+    public void setSdt(String sdt) { this.sdt = sdt; }
+    public void setEmail(String email) { this.email = email; }
+    public void setVaiTro(String vaiTro) { this.vaiTro = vaiTro; }
+    public void setTrangThai(Boolean trangThai) { this.trangThai = trangThai; }
     
         public String getMaND() {
             return maND;

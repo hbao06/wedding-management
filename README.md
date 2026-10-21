@@ -2,7 +2,7 @@
 
 Đồ án môn Công nghệ phần mềm (Lab 7: Software Implementation & Version Control). Hệ thống hướng tới việc quản lý sảnh, phiếu đặt tiệc, tiền cọc, hóa đơn và thanh toán cho một trung tâm tiệc cưới. Thiết kế nghiệp vụ và kiến trúc kế thừa từ Lab 6.
 
-**Trạng thái hiện tại:** đã có khung CSDL, đăng nhập và chức năng thanh toán một lần trên nhánh `feature/payment`. Booking vẫn đang được phát triển; dữ liệu mẫu chưa có tài khoản hoặc phiếu đặt tiệc.
+**Trạng thái hiện tại:** `develop` có đăng nhập bằng phiên server, đăng ký khách hàng, lập phiếu đặt tiệc và thanh toán một lần. Dữ liệu mẫu mặc định chưa có tài khoản; có thể bật profile `demo` để xem payment.
 
 ## Thành viên và phân công
 
@@ -30,7 +30,7 @@
 - Backend: Java 17, Spring Boot 3.5.16, Maven, Spring Data JPA.
 - Frontend: React 19, Vite 8, React Router 7, Axios.
 - CSDL: MySQL 8, bảng mã `utf8mb4`.
-- Kiểm thử: JUnit 5 và Mockito cho phép tính, xác nhận thanh toán và phân quyền API.
+- Kiểm thử: JUnit 5 và Mockito cho đăng ký, xác thực tài khoản, tính tiền và phân quyền payment.
 
 ```text
 wedding-management/
@@ -172,8 +172,10 @@ API có tiền tố `/api`. Các API thanh toán yêu cầu phiên đăng nhập
 | --- | --- | --- | --- |
 | Đã có | `GET` | `/api/health` | Trạng thái Backend, kết nối CSDL và số sảnh |
 | Đã có | `POST` | `/api/auth/login` | Đăng nhập, tạo phiên server |
+| Đã có | `POST` | `/api/auth/register` | Đăng ký khách hàng, tạo `NGUOIDUNG` và `KHACHHANG` |
 | Đã có | `GET` | `/api/auth/me` | Lấy người dùng của phiên hiện tại |
 | Đã có | `POST` | `/api/auth/logout` | Hủy phiên đăng nhập |
+| Đã có | `POST` | `/api/admin/users/employees` | Admin tạo tài khoản nhân viên |
 | Dự kiến | `GET` | `/api/sanh` | Danh sách sảnh |
 | Dự kiến | `GET` | `/api/sanh/con-trong?ngay=2026-12-20&ca=TOI` | Kiểm tra sảnh trống |
 | Dự kiến | `GET` | `/api/dich-vu` | Danh sách dịch vụ |
@@ -182,6 +184,8 @@ API có tiền tố `/api`. Các API thanh toán yêu cầu phiên đăng nhập
 | Đã có | `GET` | `/api/thanh-toan/phieu?q=` | Tra cứu tối đa 30 phiếu theo mã hoặc tên cô dâu/chú rể |
 | Đã có | `GET` | `/api/thanh-toan/phieu/{maPhieu}/xem-truoc?ngayThanhToan=2026-12-20` | Xem trước số tiền cần thu |
 | Đã có | `POST` | `/api/thanh-toan/hoa-don` | Xác nhận đã thu tiền, tạo hóa đơn một lần |
+
+Đăng ký nhận `hoTen`, `tenDangNhap`, `matKhau`, `email`, `sdt`, `hoTenChuRe`, `hoTenCoDau`. Mật khẩu được hash bằng BCrypt; người dùng đăng nhập lại sau khi đăng ký. Xác thực tài khoản ở đây là xác thực mật khẩu và phiên server, **chưa có xác minh email hoặc OTP**. Spring Security bảo vệ API booking, payment và admin; CSRF hiện tắt theo cấu hình phát triển, cần bật trước khi triển khai công khai.
 
 Body xác nhận: `{"maPhieu":"P001","ngayThanhToan":"2026-12-20","soTienCanThu":7200000}`. `soTienCanThu` phải khớp bản tính lại trên server, nếu không API trả `409` để kế toán xem trước lại. Chỉ phiếu `Đã đặt cọc` và đã đến ngày đãi tiệc mới được thanh toán. Tiền phạt = tổng tiền hóa đơn × tỷ lệ QD002 (hiện 1%/ngày) × số ngày sau ngày đãi tiệc; sau đó trừ tiền cọc. Hiện tổng tiền hóa đơn lấy từ `TongTienDuKien` của phiếu vì chưa có nghiệp vụ điều chỉnh chi phí thực tế. Hóa đơn được lập lúc xác nhận đã nhận tiền, `SoTienConLai = 0`; nút in trên giao diện dùng hộp thoại in của trình duyệt để lưu PDF.
 
