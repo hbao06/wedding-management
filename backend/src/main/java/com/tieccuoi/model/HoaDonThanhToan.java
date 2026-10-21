@@ -39,4 +39,24 @@ public class HoaDonThanhToan {
     private String trangThaiTT;
 
     protected HoaDonThanhToan() {}
+
+    public HoaDonThanhToan(String maHD, String maPhieu, String maNV,
+            LocalDate ngayLapHD, LocalDate ngayThanhToan, BigDecimal tongTienHoaDon,
+            BigDecimal tienPhatTreHan) {
+        this.maHD = maHD;
+        this.maPhieu = maPhieu;
+        this.maNV = maNV;
+        this.ngayLapHD = ngayLapHD;
+        this.ngayThanhToan = ngayThanhToan;
+        this.tongTienHoaDon = tongTienHoaDon;
+        this.tienPhatTreHan = tienPhatTreHan;
+        this.soTienConLai = BigDecimal.ZERO;
+        this.trangThaiTT = "Đã thanh toán";
+    }
+
+    public String getMaHD() { return maHD; }
+    public LocalDate getNgayThanhToan() { return ngayThanhToan; }
+    public BigDecimal getTongTienHoaDon() { return tongTienHoaDon; }
+    public BigDecimal getTienPhatTreHan() { return tienPhatTreHan; }
+    public BigDecimal getSoTienConLai() { return soTienConLai; }
 }

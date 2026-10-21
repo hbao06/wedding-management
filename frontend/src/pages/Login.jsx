@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { HeartHandshake, LockKeyhole, UserRound } from 'lucide-react'
 import api from '../services/api.js'
 
-export default function Login() {
+export default function Login({ onLogin }) {
   const navigate = useNavigate()
 
   const [tenDangNhap, setTenDangNhap] = useState('')
@@ -23,9 +23,8 @@ export default function Login() {
         matKhau,
       })
 
-      // Lưu thông tin người dùng sau khi đăng nhập thành công.
-      sessionStorage.setItem('nguoiDung', JSON.stringify(response.data))
-      navigate('/')
+      onLogin(response.data)
+      navigate(response.data.chucVu === 'Kế toán' ? '/thanh-toan' : '/')
     } catch (err) {
       if (err.response?.status === 401) {
         setError('Tên đăng nhập hoặc mật khẩu không đúng.')

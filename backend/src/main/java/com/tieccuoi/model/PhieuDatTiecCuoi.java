@@ -55,4 +55,13 @@ public class PhieuDatTiecCuoi {
     private LocalDateTime ngayLapPhieu;
 
     protected PhieuDatTiecCuoi() {}
+
+    public String getMaPhieu() { return maPhieu; }
+    public String getTenChuRe() { return tenChuRe; }
+    public String getTenCoDau() { return tenCoDau; }
+    public LocalDate getNgayDaiTiec() { return ngayDaiTiec; }
+    public BigDecimal getTienDatCoc() { return tienDatCoc; }
+    public BigDecimal getTongTienDuKien() { return tongTienDuKien; }
+    public String getTrangThai() { return trangThai; }
+    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
 }
