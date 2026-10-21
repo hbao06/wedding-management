@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Database, HeartHandshake, LogOut, RefreshCw, Server } from 'lucide-react'
 import { Navigate, NavLink, Route, Routes, useNavigate } from 'react-router'
 import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
 import Payment from './pages/Payment.jsx'
 import api, { getCurrentUser, getHealth } from './services/api.js'
 import Booking from './pages/Booking.jsx'
@@ -121,6 +122,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={user ? <Navigate to={user.chucVu === 'Kế toán' ? '/thanh-toan' : '/'} replace /> : <Login onLogin={setUser} />} />
+      <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
       <Route path="/booking" element={user ? <Booking /> : <Navigate to="/login" replace />} />
       <Route path="/booking-result/:maPhieu" element={user ? <BookingResult /> : <Navigate to="/login" replace />} />
       <Route path="*" element={user ? <Workspace user={user} onLogout={() => setUser(null)} /> : <Navigate to="/login" replace />} />

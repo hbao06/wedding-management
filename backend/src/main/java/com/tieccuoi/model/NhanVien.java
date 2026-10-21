@@ -18,5 +18,21 @@ public class NhanVien extends NguoiDung {
 
     protected NhanVien() {}
 
+    public static NhanVien register(String maNV, String hoTen, String tenDangNhap,
+            String matKhauHash, String email, String sdt, String chucVu, LocalDate ngayVaoLam) {
+        NhanVien employee = new NhanVien();
+        employee.setMaND(maNV);
+        employee.setHoTen(hoTen);
+        employee.setTenDangNhap(tenDangNhap);
+        employee.setMatKhauHash(matKhauHash);
+        employee.setEmail(email);
+        employee.setSdt(sdt);
+        employee.setVaiTro("NhanVien");
+        employee.setTrangThai(true);
+        employee.chucVu = chucVu;
+        employee.ngayVaoLam = ngayVaoLam;
+        return employee;
+    }
+
     public String getChucVu() { return chucVu; }
 }
